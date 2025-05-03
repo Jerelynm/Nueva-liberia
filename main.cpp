@@ -163,20 +163,19 @@ void bitacoraDeRegistro(string mensaje) {
     MessageBoxA(NULL, horaMensaje.c_str(), "Hora del Sistema", MB_OK | MB_ICONINFORMATION);
 }
 void renombrar(){
-    filesystem::directory_iterator directoryIterator("C:/Users/admin/OneDrive/Documentos/prueba windows/");
-    try {
-        for (const auto& entry : fs::directory_iterator("C:/Users/admin/OneDrive/Documentos/prueba windows/")) {
-            if (!fs::is_directory(entry.status())) {
-                fs::path oldPath = entry.path();
-                fs::path newPath = oldPath.parent_path() / ("renombrado_" + oldPath.filename().string());
+    string ruta = "C:/Users/admin/OneDrive/Documentos/prueba windows/";
+    int contador = 1;
 
-                fs::rename(oldPath, newPath);
-                std::cout << "Renombrado: " << oldPath.filename() << " -> " << newPath.filename() << std::endl;
-            }
+    for (const auto& entry : filesystem::directory_iterator(ruta)) {
+        if (!filesystem::is_directory(entry.path())) {
+            string nuevaRuta = ruta + "archivo" + to_string(contador) + ".txt";
+            filesystem::rename(entry.path(), nuevaRuta);
+            contador++;
         }
-    } catch (const fs::filesystem_error& e) {
-        std::cerr << "Error: " << e.what() << std::endl;
     }
+
+    bitacoraDeRegistro("Archivos renombrados");
+
 /*
     for(const auto& entry: directoryIterator){
         if (!filesystem::is_directory(entry.status())){
